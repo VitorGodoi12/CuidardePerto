@@ -8,6 +8,16 @@ import 'package:cuidar_de_perto/services/perfil_repository.dart';
 
 /// Implementações em memória para autenticação e dados locais do protótipo.
 class AuthEmMemoria implements AuthRepository {
+  AuthEmMemoria() {
+    _contas[CredenciaisDemo.email] = _Conta(
+      CredenciaisDemo.uid,
+      CredenciaisDemo.email,
+      CredenciaisDemo.senha,
+      CredenciaisDemo.nome,
+      ['password'],
+    )..verificado = true;
+  }
+
   final Map<String, _Conta> _contas = {};
   final StreamController<UsuarioAuth?> _controle = StreamController<UsuarioAuth?>.broadcast();
   UsuarioAuth? _atual;
@@ -66,7 +76,6 @@ class AuthEmMemoria implements AuthRepository {
   }
 
   @override
-  @override
   Future<void> enviarRecuperacaoSenha(String email) async => recuperacoesEnviadas.add(email.trim());
 
   @override
@@ -101,6 +110,18 @@ class _Conta {
 class PerfisEmMemoria implements PerfilRepository {
   final Map<String, PerfilCuidador> bancos = {};
 
+  PerfisEmMemoria() {
+    bancos[CredenciaisDemo.uid] = PerfilCuidador(
+      uid: CredenciaisDemo.uid,
+      nomeCompleto: CredenciaisDemo.nome,
+      email: CredenciaisDemo.email,
+      telefone: '(11) 90000-0000',
+      criadoEm: DateTime(2026, 1, 1),
+      primeiroAcesso: false,
+      provedores: const ['password'],
+    );
+  }
+
   @override
   Future<PerfilCuidador?> obter(String uid) async => bancos[uid];
 
@@ -118,6 +139,21 @@ class PerfisEmMemoria implements PerfilRepository {
 
 class DadosEmMemoria implements DadosRepository {
   final Map<String, Map<int, Map<String, dynamic>>> bancos = {};
+
+  DadosEmMemoria() {
+    final idoso = Idoso(
+      id: 1,
+      nome: 'Dona Maria',
+      idade: 78,
+      condicoes: ['Hipertensão'],
+      endereco: 'Rua das Flores, 100',
+      telefone: '(11) 90000-0001',
+      horasSemMovimento: 0.5,
+      dispositivoOnline: true,
+      avatar: 'assets/images/avatar_maria.png',
+    );
+    bancos[CredenciaisDemo.uid] = {idoso.id: idoso.toMap()};
+  }
 
   @override
   Future<List<Idoso>> carregarIdosos(String uid) async =>

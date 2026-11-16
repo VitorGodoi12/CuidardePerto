@@ -157,5 +157,5 @@ A versão atual aplica o padrão visual da referência nas telas de boas-vindas,
 
 O login e o cadastro são simulados no próprio aplicativo. As contas e os dados ficam em memória e são apagados quando o app é encerrado. Não há autenticação real, sincronização ou persistência. Use dados fictícios e não informe senhas reais.
 
-Para começar, crie uma conta demonstrativa na tela de cadastro; depois entre com o e-mail e a senha cadastrados.
+Na tela de entrar há uma conta de demonstração pronta, com e-mail e senha preenchidos. Também é possível consultar e preencher as credenciais pelo cartão **Acesso de demonstração**. Essa conta inclui um perfil fictício e a pessoa acompanhada Dona Maria; não pertence a um cuidador real.
 

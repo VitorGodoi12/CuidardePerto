@@ -30,7 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_iniciado) return;
     _iniciado = true;
     final sessao = SessaoScope.leitura(context);
-    _email.text = sessao.emailLembrado;
+    _email.text = sessao.emailLembrado.isNotEmpty ? sessao.emailLembrado : CredenciaisDemo.email;
+    _senha.text = CredenciaisDemo.senha;
     _lembrar = sessao.lembrarPadrao;
   }
 
@@ -75,6 +76,40 @@ class _LoginScreenState extends State<LoginScreen> {
       const Text('Faça login para continuar',
           textAlign: TextAlign.center, style: TextStyle(fontSize: 14, color: AppColors.textoSuave)),
       const SizedBox(height: 26),
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.verdeSuave,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.borda),
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('Acesso de demonstração',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: AppColors.primariaEscura)),
+          const SizedBox(height: 8),
+          SelectableText('E-mail: ${CredenciaisDemo.email}', style: const TextStyle(fontSize: 14, color: AppColors.texto)),
+          const SizedBox(height: 4),
+          SelectableText('Senha: ${CredenciaisDemo.senha}', style: const TextStyle(fontSize: 14, color: AppColors.texto)),
+          const SizedBox(height: 6),
+          const Text('Conta e dados fictícios, disponíveis somente neste protótipo.',
+              style: TextStyle(fontSize: 12, color: AppColors.textoSuave)),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton.icon(
+              onPressed: bloqueado
+                  ? null
+                  : () => setState(() {
+                        _email.text = CredenciaisDemo.email;
+                        _senha.text = CredenciaisDemo.senha;
+                      }),
+              icon: const Icon(Icons.login_rounded, size: 18),
+              label: const Text('Preencher acesso'),
+            ),
+          ),
+        ]),
+      ),
+      const SizedBox(height: 20),
       Form(
         key: _formKey,
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [

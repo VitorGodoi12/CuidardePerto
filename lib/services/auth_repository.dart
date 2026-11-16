@@ -1,5 +1,15 @@
 /// Contrato de autenticação local do protótipo.
 
+/// Credenciais públicas de demonstração, sem vínculo com uma pessoa real.
+class CredenciaisDemo {
+  CredenciaisDemo._();
+
+  static const uid = 'cuidador-demo';
+  static const email = 'demo@cuidardeperto.com';
+  static const senha = 'CuidaDemo2026!';
+  static const nome = 'Cuidador Demonstração';
+}
+
 class UsuarioAuth {
   const UsuarioAuth({
     required this.uid,
