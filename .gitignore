@@ -1,0 +1,43 @@
+# Miscelânea
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/*
+!.vscode/launch.json
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+coverage/
+
+# Android
+**/android/.gradle
+**/android/captures/
+**/android/local.properties
+**/android/key.properties
+*.jks
+
+# iOS / macOS
+**/ios/**/Pods/
+**/ios/**/xcuserdata/
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+
