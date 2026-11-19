@@ -57,7 +57,7 @@ A **hora simulada é fixa em 14:00**: dose não tomada com horário anterior a i
 
 ## Como executar
 
-**Requisitos:** Flutter 3.16 ou superior (Dart 3), VS Code ou Android Studio e um emulador Android ou celular.
+**Requisitos para Android:** Flutter 3.50 ou superior (Dart 3), JDK 17, VS Code ou Android Studio, Android SDK Platforms 35 e 36, Android SDK Build-Tools 36.0.0, NDK 28.2.13676358 e CMake 3.22.1. No Android Studio, instale as plataformas em **Tools → SDK Manager → SDK Platforms** e os demais componentes na aba **SDK Tools**. O SDK/Gradle local (`android/local.properties`, `android/.gradle`, `build/`) não é versionado; cada máquina instala seus próprios componentes.
 
 ```bash
 git clone https://github.com/VitorGodoi12/CuidardePerto.git
@@ -67,7 +67,10 @@ flutter pub get
 flutter analyze
 flutter test
 flutter run
+flutter build apk --release
 ```
+
+O APK de release é gerado em `build/app/outputs/flutter-apk/app-release.apk`.
 
 **Acesso demonstrativo:** crie uma conta na tela de cadastro. As contas e os dados existem apenas durante a execução atual do app; use dados fictícios.
 
