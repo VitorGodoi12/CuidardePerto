@@ -57,12 +57,13 @@ A **hora simulada é fixa em 14:00**: dose não tomada com horário anterior a i
 
 ## Como executar
 
-**Requisitos para Android:** Flutter 3.50 ou superior (Dart 3), JDK 17, VS Code ou Android Studio, Android SDK Platforms 35 e 36, Android SDK Build-Tools 36.0.0, NDK 28.2.13676358 e CMake 3.22.1. No Android Studio, instale as plataformas em **Tools → SDK Manager → SDK Platforms** e os demais componentes na aba **SDK Tools**. O SDK/Gradle local (`android/local.properties`, `android/.gradle`, `build/`) não é versionado; cada máquina instala seus próprios componentes.
+**Requisitos para Android:** Flutter 3.47.8 ou superior (Dart 3.13+), JDK 17, VS Code ou Android Studio, Android SDK Platform 36.0 (API 36, incluindo `platforms/android-36/android.jar`), Android SDK Build-Tools 36.0.0, NDK 28.2.13676358 e CMake 3.22.1. No Android Studio, abra **Tools → SDK Manager → SDK Platforms**, marque **Android 16 / API 36** e aplique. Na aba **SDK Tools**, instale os componentes indicados acima. O Android SDK e o Gradle não são armazenados no GitHub: cada pessoa instala o SDK localmente, e o Gradle Wrapper baixa a versão fixada pelo projeto na primeira compilação. O arquivo `android/local.properties` é local e será gerado pelo Flutter.
 
 ```bash
 git clone https://github.com/VitorGodoi12/CuidardePerto.git
-cd cuidar_de_perto
+cd CuidardePerto
 
+flutter doctor --android-licenses
 flutter pub get
 flutter analyze
 flutter test
