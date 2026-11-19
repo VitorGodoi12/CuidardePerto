@@ -23,7 +23,7 @@ class _CadastroMedicamentoScreenState extends State<CadastroMedicamentoScreen> {
 
   AutovalidateMode _modoValidacao = AutovalidateMode.disabled;
 
-  static final RegExp _formatoHorario = RegExp(r'^([01]?\d|2[0-3]):([0-5]\d)$');
+  static final RegExp _formatoHorario = RegExp(r'^([01]?\d|2[0-3]):?([0-5]\d)$');
 
   @override
   void dispose() {
@@ -45,7 +45,7 @@ class _CadastroMedicamentoScreenState extends State<CadastroMedicamentoScreen> {
   }
 
   String? _validarHorario(String? valor) {
-    if (!_formatoHorario.hasMatch((valor ?? '').trim())) return 'Horário inválido (use HH:mm)';
+    if (!_formatoHorario.hasMatch((valor ?? '').trim())) return 'Horário inválido. Ex.: 0830 ou 08:30';
     return null;
   }
 
@@ -55,8 +55,8 @@ class _CadastroMedicamentoScreenState extends State<CadastroMedicamentoScreen> {
   }
 
   String _normalizarHorario(String texto) {
-    final partes = texto.trim().split(':');
-    return '${partes[0].padLeft(2, '0')}:${partes[1]}';
+    final horario = _formatoHorario.firstMatch(texto.trim())!;
+    return '${horario[1]!.padLeft(2, '0')}:${horario[2]}';
   }
 
   void _salvar() {
@@ -120,7 +120,7 @@ class _CadastroMedicamentoScreenState extends State<CadastroMedicamentoScreen> {
             const SizedBox(height: Espaco.m),
             TextFormField(
               controller: _horarioController,
-              keyboardType: TextInputType.datetime,
+              keyboardType: TextInputType.number,
               textInputAction: TextInputAction.next,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9:]')),
@@ -129,7 +129,7 @@ class _CadastroMedicamentoScreenState extends State<CadastroMedicamentoScreen> {
               style: const TextStyle(fontSize: 18),
               decoration: AppTheme.campo(
                 rotulo: 'Horário *',
-                dica: 'Ex.: 08:00 (formato HH:mm)',
+                dica: 'Digite 0830 para salvar 08:30',
                 icone: Icons.schedule,
               ),
               validator: _validarHorario,

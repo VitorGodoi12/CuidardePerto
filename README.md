@@ -51,7 +51,7 @@ A interface segue a referência visual turquesa e verde-menta: abertura em degra
 | Médio | 3 h ou mais sem movimento, ou 1 dose atrasada |
 | Baixo | Nenhuma das anteriores |
 
-A **hora simulada é fixa em 14:00**: dose não tomada com horário anterior a isso aparece como "Atrasado". O risco crítico não existe nos dados iniciais; aparece ao simular uma queda ou o botão de pânico.
+O app usa o relógio do dispositivo para identificar doses atrasadas. O risco crítico aparece ao simular uma queda ou o botão de pânico.
 
 ## Como executar
 
@@ -73,12 +73,12 @@ O APK de release é gerado em `build/app/outputs/flutter-apk/app-release.apk`.
 
 Se o Gradle falhar com `Cannot query the value of this provider because it has no value available`, confira se as pastas `platforms/android-36` e `platforms/android-35` do SDK contêm `android.jar`. Nesta versão, o app compila com a API 36 e uma dependência Android usa a API 35. Se faltar o arquivo em uma das pastas, reinstale a plataforma correspondente pelo SDK Manager. Para executar o app, inicie um dispositivo virtual no **Device Manager** ou conecte um celular com depuração USB e confirme que ele aparece em `flutter devices`.
 
-**Acesso demonstrativo.** Na tela de login, use a conta já preenchida ou toque em **Acesso de demonstração** para preencher os campos. Ela inclui Dona Maria entre as pessoas acompanhadas. Se preferir criar uma conta, use dados fictícios.
+**Acesso demonstrativo.** Na tela de login, use a conta já preenchida ou toque em **Acesso de demonstração** para preencher os campos. A conta inclui Dona Maria, Seu José e Dona Antônia, com três medicamentos fictícios por pessoa, contatos, alertas de histórico e registros da agenda.
 
 **Roteiro rápido de demonstração:**
 1. Teste o login com campos vazios, senha curta e senha errada. Depois, entre com a conta de demonstração.
 2. Painel → Dona Maria → Medicamentos: marque doses e veja o contador e a barra mudarem.
-3. "Novo medicamento": envie vazio, use horário `25:70`, preencha corretamente.
+3. Em **Novo medicamento**, tente salvar com campos vazios, depois com horário `2570`. Corrija para `0830` e confirme que a lista mostra `08:30`.
 4. Detalhe → Simular evento → Queda → Ver contatos → Marcar como resolvido.
 5. Painel: risco atualizado. Histórico: filtros Todos, Crítico, Alto e Médio.
 
@@ -104,7 +104,7 @@ test/widget_test.dart     testes de risco, login, medicamentos e cadastro
 - **Navegação** com `Navigator.push` e `MaterialPageRoute` (rotas nomeadas não são usadas).
 - **Acessibilidade:** textos de 16 a 18 sp, botões com no mínimo 48 dp, rótulos permanentes nos campos, ícones sempre com texto, risco indicado por cor, ícone e texto, e animações desligadas quando o sistema pede "reduzir movimento".
 - **Cores de risco** preservam os valores oficiais; o texto dos selos usa tons mais escuros do mesmo matiz para garantir contraste.
-- O horário do cadastro aceita `8:30` e salva como `08:30`.
+- O horário aceita `0830`, `830`, `08:30` e `8:30`. Todos são salvos como `08:30`.
 - Fundo claro `#F5FAF9`, cartões brancos e identidade turquesa `#078F91` / verde-petróleo `#006F73`.
 
 ## Declaração de uso de IA generativa
@@ -163,5 +163,5 @@ A versão atual aplica o padrão visual da referência nas telas de boas-vindas,
 
 O login e o cadastro são simulados no próprio aplicativo. As contas e os dados ficam em memória e são apagados quando o app é encerrado. Não há autenticação real, sincronização ou persistência. Use dados fictícios e não informe senhas reais.
 
-Na tela de entrar há uma conta de demonstração pronta, com e-mail e senha preenchidos. Também é possível consultar e preencher as credenciais pelo cartão **Acesso de demonstração**. Essa conta inclui um perfil fictício e a pessoa acompanhada Dona Maria; não pertence a um cuidador real.
+Na tela de entrar, o cartão **Acesso de demonstração** permite consultar e preencher as credenciais do perfil fictício.
 

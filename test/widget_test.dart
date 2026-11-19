@@ -339,6 +339,32 @@ void main() {
   });
 
   group('Medicamentos', () {
+    testWidgets('cadastro rejeita horário inválido e salva horário digitado sem dois-pontos', (tester) async {
+      usarTelaDeCelular(tester);
+      final idoso = criarIdoso();
+      await tester.pumpWidget(MaterialApp(theme: AppTheme.tema, home: MedicamentosScreen(idoso: idoso)));
+      await tester.tap(find.text('Adicionar Medicamento'));
+      await tester.pumpAndSettle();
+
+      final campos = find.byType(TextFormField);
+      await tester.enterText(campos.at(0), 'Medicamento de teste');
+      await tester.enterText(campos.at(1), '1 comprimido');
+      await tester.enterText(campos.at(2), '2570');
+      final salvar = find.text('Salvar medicamento');
+      await tester.ensureVisible(salvar);
+      await tester.tap(salvar);
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Horário inválido'), findsOneWidget);
+      expect(idoso.medicamentos, isEmpty);
+
+      await tester.enterText(campos.at(2), '0830');
+      await tester.ensureVisible(salvar);
+      await tester.tap(salvar);
+      await tester.pumpAndSettle();
+      expect(idoso.medicamentos.single.horario, '08:30');
+      expect(find.text('Medicamento de teste'), findsOneWidget);
+    });
+
     testWidgets('marcar como tomado atualiza o contador na hora', (tester) async {
       usarTelaDeCelular(tester);
       final idoso = criarIdoso(medicamentos: [atrasado(), pendente()]);
