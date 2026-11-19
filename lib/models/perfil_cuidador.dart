@@ -46,6 +46,7 @@ class PerfilCuidador {
   });
 
   static const String tipoCuidador = 'cuidador';
+  static const String tipoFamiliar = 'familiar';
 
   final String uid;
   final String nomeCompleto;
@@ -54,8 +55,9 @@ class PerfilCuidador {
   final String telefone;
   final String? fotoUrl;
 
-  /// Sempre 'cuidador'. Não deve ser alterado pelo usuário.
+  /// Definido no cadastro e mantido ao atualizar o perfil.
   final String tipoUsuario;
+  bool get familiar => tipoUsuario == tipoFamiliar;
   final PreferenciasNotificacao notificacoes;
 
   /// true enquanto o cuidador ainda não concluiu a experiência de boas-vindas.
@@ -107,7 +109,7 @@ class PerfilCuidador {
         criadoEm: criadoEm,
         telefone: (m['telefone'] ?? '') as String,
         fotoUrl: m['fotoUrl'] as String?,
-        tipoUsuario: (m['tipoUsuario'] ?? tipoCuidador) as String,
+        tipoUsuario: m['tipoUsuario'] == tipoFamiliar ? tipoFamiliar : tipoCuidador,
         notificacoes: PreferenciasNotificacao.fromMap(
             m['notificacoes'] == null ? null : Map<String, dynamic>.from(m['notificacoes'] as Map)),
         primeiroAcesso: (m['primeiroAcesso'] ?? true) as bool,

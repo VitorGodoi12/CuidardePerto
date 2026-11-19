@@ -5,6 +5,7 @@ import '../theme/app_theme.dart';
 import '../widgets/auth_widgets.dart';
 import '../widgets/logo_cuidar.dart';
 import 'boas_vindas_screen.dart';
+import 'painel_familiar_screen.dart';
 import 'painel_screen.dart';
 import 'primeiro_acesso_screen.dart';
 import 'verificar_email_screen.dart';
@@ -27,6 +28,9 @@ class AuthGate extends StatelessWidget {
         return const PrimeiroAcessoScreen();
       case StatusSessao.autenticado:
         // A chave por usuário garante estado novo quando outro cuidador entra.
+        if (sessao.perfil?.familiar == true) {
+          return PainelFamiliarScreen(key: ValueKey(sessao.perfil!.uid), sessao: sessao);
+        }
         return PainelScreen(key: ValueKey(sessao.perfil?.uid));
       case StatusSessao.erro:
         return const _ErroCarregamento();

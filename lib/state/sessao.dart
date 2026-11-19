@@ -55,6 +55,7 @@ class Sessao extends ChangeNotifier {
   StreamSubscription<UsuarioAuth?>? _assinatura;
   bool _fluxoManual = false;
   String? _nomeInicial;
+  String? _uidFamiliarEmCadastro;
   String? _telefoneInicial;
   AcaoInicial _acaoInicial = AcaoInicial.nenhuma;
   String _emailLembrado = '';
@@ -118,6 +119,7 @@ class Sessao extends ChangeNotifier {
   }
 
   void _descartarDados() {
+    _uidFamiliarEmCadastro = null;
     DadosCuidador.limpar();
     _usuario = null;
     _perfil = null;
@@ -129,6 +131,7 @@ class Sessao extends ChangeNotifier {
     _mensagemErro = null;
     try {
       var perfil = await perfis.obter(u.uid);
+      final familiar = _uidFamiliarEmCadastro == u.uid;
       perfil ??= await perfis.criar(PerfilCuidador(
         uid: u.uid,
         nomeCompleto: _nomeInicial ?? ((u.nome ?? '').trim().isNotEmpty ? u.nome!.trim() : u.email.split('@').first),
@@ -136,11 +139,17 @@ class Sessao extends ChangeNotifier {
         telefone: _telefoneInicial ?? '',
         fotoUrl: u.fotoUrl,
         criadoEm: DateTime.now(),
-        primeiroAcesso: true,
+        tipoUsuario: familiar ? PerfilCuidador.tipoFamiliar : PerfilCuidador.tipoCuidador,
+        primeiroAcesso: !familiar,
         provedores: u.provedores,
       ));
-      final idosos = await dados.carregarIdosos(u.uid);
-      DadosCuidador.definir(u.uid, idosos, dados);
+      if (familiar) _uidFamiliarEmCadastro = null;
+      if (perfil.familiar) {
+        DadosCuidador.limpar();
+      } else {
+        final idosos = await dados.carregarIdosos(u.uid);
+        DadosCuidador.definir(u.uid, idosos, dados);
+      }
       _perfil = perfil;
       if (u.exigeVerificacao) {
         _status = StatusSessao.verificandoEmail;
@@ -179,6 +188,7 @@ class Sessao extends ChangeNotifier {
     required String email,
     required String senha,
     String telefone = '',
+    bool comoFamiliar = false,
   }) async {
     _nomeInicial = nome.trim();
     _telefoneInicial = telefone.trim();
@@ -186,6 +196,7 @@ class Sessao extends ChangeNotifier {
       await _fluxo<UsuarioAuth>(
         () => auth.cadastrarComEmail(nome: nome, email: email, senha: senha),
         (u) async {
+          if (comoFamiliar) _uidFamiliarEmCadastro = u.uid;
           await _guardarPreferencias(lembrar: true, email: email);
           await _carregar(u);
         },
@@ -247,7 +258,7 @@ class Sessao extends ChangeNotifier {
   /// Marca o primeiro acesso e recarrega as pessoas acompanhadas.
   Future<void> recarregarDados() async {
     final u = _usuario;
-    if (u == null) return;
+    if (u == null || _perfil?.familiar != false) return;
     await DadosCuidador.sincronizarPendentes();
     final idosos = await dados.carregarIdosos(u.uid);
     DadosCuidador.definir(u.uid, idosos, dados);

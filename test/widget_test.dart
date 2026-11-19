@@ -322,6 +322,45 @@ void main() {
       expect(a.auth.atual?.email, 'ana@x.com');
     });
 
+    testWidgets('cadastro como familiar abre painel de consulta e mantém o tipo após login', (tester) async {
+      final a = await abrir(tester);
+      await tester.tap(find.widgetWithText(OutlinedButton, 'Cadastrar'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Cuidador'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Familiar').last);
+      await tester.pumpAndSettle();
+
+      final campos = find.byType(TextFormField);
+      await tester.enterText(campos.at(0), 'Ana Souza');
+      await tester.enterText(campos.at(1), 'familia@exemplo.com');
+      await tester.enterText(campos.at(3), '12345678');
+      await tester.enterText(campos.at(4), '12345678');
+      await tester.ensureVisible(find.byType(Checkbox));
+      await tester.tap(find.byType(Checkbox));
+      final criar = find.widgetWithText(ElevatedButton, 'Criar conta');
+      await tester.ensureVisible(criar);
+      await tester.tap(criar);
+      await tester.pumpAndSettle();
+
+      a.auth.verificarEmailNoServidor('familia@exemplo.com');
+      await tester.runAsync(() => a.sessao.atualizarVerificacao());
+      await tester.pumpAndSettle();
+      expect(find.text('Área do familiar'), findsOneWidget);
+      expect(DadosCuidador.idosos, isEmpty);
+      await tester.tap(find.text('Dona Maria'));
+      await tester.pumpAndSettle();
+      expect(find.text('Losartana'), findsOneWidget);
+      expect(find.text('Adicionar Medicamento'), findsNothing);
+
+      await tester.runAsync(() async {
+        await a.sessao.sair();
+        await a.sessao.entrarComEmail(email: 'familia@exemplo.com', senha: '12345678', lembrar: false);
+      });
+      await tester.pumpAndSettle();
+      expect(find.text('Área do familiar'), findsOneWidget);
+    });
+
     testWidgets('recuperação de senha confirma o envio', (tester) async {
       final a = await abrir(tester);
       await tester.tap(find.widgetWithText(ElevatedButton, 'Entrar'));

@@ -20,7 +20,7 @@ A interface segue a referência visual turquesa e verde-menta: abertura em degra
 
 | Nº | Tela | O que faz |
 |----|------|-----------|
-| 1 | Login e cadastro | Entrada e criação de perfil demonstrativas, com validação de campos |
+| 1 | Login e cadastro | Entrada e criação de conta como cuidador ou familiar, com validação de campos |
 | 2 | Painel | Saudação, atalhos para idosos/medicamentos/agenda/perfil, resumo do dia e alertas |
 | 3 | Meus Idosos | Lista de pessoas acompanhadas e cadastro de novos idosos |
 | 4 | Detalhe do idoso | Situação atual e atalhos (Medicamentos, Histórico, Contatos, Simular evento) |
@@ -32,12 +32,13 @@ A interface segue a referência visual turquesa e verde-menta: abertura em degra
 | 10 | Agenda e central de cuidado | Calendário mensal selecionável, consultas, rotina, hidratação, check-in, humor, diário, recados, equipe, relatório e acessibilidade |
 | 11 | Lembretes | Lista de doses pendentes e tela de lembrete com opção para marcar como tomada |
 | 12 | Mais e Meu Perfil | Preferências demonstrativas, contatos, alertas, dados do cuidador e saída da conta |
+| 13 | Área do familiar | Consulta de resumo, medicamentos, agenda do dia e histórico de alertas fictícios |
 
 ### Fluxo de navegação
 
 `Boas-vindas → Login/Cadastro → Painel → Detalhe → (Medicamentos → Cadastro | Histórico | Contatos | Alerta crítico → Contatos)`. A navegação inferior oferece Início, Idosos, botão central de ações rápidas, Agenda e Mais. Medicamentos, lembretes e alertas também ficam nos atalhos do painel e em Mais.
 
-- O `AuthGate` escolhe a tela de acordo com o estado da sessão. Após a autenticação e as etapas de primeiro acesso, mostra o Painel. Ao sair da conta, volta para Boas-vindas.
+- O `AuthGate` escolhe a tela pelo estado da sessão e pelo tipo de conta. Após a autenticação, direciona para o painel de cuidador ou para a Área do familiar. Ao sair da conta, volta para Boas-vindas.
 - Parâmetros por construtor: `Idoso` (Painel → Detalhe → telas de medicamentos, histórico e contatos), `Alerta` (Detalhe → Alerta crítico).
 - Valores de retorno com `Navigator.pop`: `Medicamento` (Cadastro → Medicamentos) e `bool` resolvido (Alerta crítico → Detalhe).
 - Em toda tela aberta com `await Navigator.push(...)`, ao voltar o app chama `setState()`.
@@ -164,4 +165,11 @@ A versão atual aplica o padrão visual da referência nas telas de boas-vindas,
 O login e o cadastro são simulados no próprio aplicativo. As contas e os dados ficam em memória e são apagados quando o app é encerrado. Não há autenticação real, sincronização ou persistência. Use dados fictícios e não informe senhas reais.
 
 Na tela de entrar, o cartão **Acesso de demonstração** permite consultar e preencher as credenciais do perfil fictício.
+
+### Contas de cuidador e de familiar
+
+- **Cuidador.** Escolha **Cuidador** no campo **Tipo de conta** para gerenciar idosos, medicamentos, agenda e alertas. O acesso de demonstração já preenchido é um perfil de cuidador.
+- **Familiar.** Na tela inicial, toque em **Cadastrar**, escolha **Familiar** e crie uma conta com dados fictícios. Na **Área do familiar**, toque no nome de uma pessoa para consultar o status do dia, os horários e a situação dos remédios, a agenda e o histórico de alertas. A área permite apenas consulta.
+
+Cada conta familiar recebe uma amostra fictícia independente. O protótipo funciona localmente, e o vínculo entre contas de cuidador e familiar depende de uma futura integração.
 

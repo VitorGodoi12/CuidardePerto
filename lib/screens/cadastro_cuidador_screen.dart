@@ -26,6 +26,7 @@ class _CadastroCuidadorScreenState extends State<CadastroCuidadorScreen> {
   bool _ocultarSenha = true;
   bool _ocultarConfirmacao = true;
   bool _aceitou = false;
+  bool _comoFamiliar = false;
   bool _mostrarErroTermos = false;
   bool _cadastrando = false;
   late final TapGestureRecognizer _abrirTermos;
@@ -68,6 +69,7 @@ class _CadastroCuidadorScreenState extends State<CadastroCuidadorScreen> {
         email: _email.text,
         senha: _senha.text,
         telefone: _telefone.text,
+        comoFamiliar: _comoFamiliar,
       );
       if (!mounted) return;
       navegador.popUntil((r) => r.isFirst);
@@ -96,9 +98,26 @@ class _CadastroCuidadorScreenState extends State<CadastroCuidadorScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900, letterSpacing: -.4, color: AppColors.texto)),
       const SizedBox(height: 6),
-      const Text('Crie sua conta de cuidador para começar',
+      const Text('Escolha como você quer acompanhar o cuidado',
           textAlign: TextAlign.center, style: TextStyle(fontSize: 14, color: AppColors.textoSuave)),
       const SizedBox(height: 22),
+      DropdownButtonFormField<bool>(
+        initialValue: _comoFamiliar,
+        decoration: campoAcesso(rotulo: 'Tipo de conta', icone: Icons.group_outlined),
+        items: const [
+          DropdownMenuItem(value: false, child: Text('Cuidador')),
+          DropdownMenuItem(value: true, child: Text('Familiar')),
+        ],
+        onChanged: bloqueado ? null : (valor) => setState(() => _comoFamiliar = valor ?? false),
+      ),
+      const SizedBox(height: 8),
+      Text(
+        _comoFamiliar
+            ? 'Consulte o acompanhamento sem editar os registros do cuidador.'
+            : 'Gerencie pessoas acompanhadas, medicamentos, agenda e alertas.',
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+      const SizedBox(height: 16),
       Form(
         key: _formKey,
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [

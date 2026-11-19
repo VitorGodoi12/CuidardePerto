@@ -145,6 +145,11 @@ class DadosEmMemoria implements DadosRepository {
   final Map<String, Map<int, Map<String, dynamic>>> bancos = {};
 
   DadosEmMemoria() {
+    bancos[CredenciaisDemo.uid] = {for (final idoso in criarIdososDemo()) idoso.id: idoso.toMap()};
+  }
+
+  /// Cria uma amostra independente para cada experiência de demonstração.
+  static List<Idoso> criarIdososDemo() {
     final idosos = [
       Idoso(
         id: 1,
@@ -233,7 +238,7 @@ class DadosEmMemoria implements DadosRepository {
         resolvido: true,
       ));
     }
-    bancos[CredenciaisDemo.uid] = {for (final idoso in idosos) idoso.id: idoso.toMap()};
+    return idosos;
   }
 
   @override
