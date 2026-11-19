@@ -250,7 +250,11 @@ void main() {
       await abrir(tester);
       await tester.tap(find.widgetWithText(ElevatedButton, 'Entrar'));
       await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Entrar'));
+      await tester.enterText(find.byType(TextFormField).at(0), '');
+      await tester.enterText(find.byType(TextFormField).at(1), '');
+      final entrar = find.widgetWithText(ElevatedButton, 'Entrar');
+      await tester.ensureVisible(entrar);
+      await tester.tap(entrar);
       await tester.pump();
       expect(find.text('Informe seu e-mail'), findsOneWidget);
       expect(find.text('Informe sua senha'), findsOneWidget);
@@ -262,7 +266,9 @@ void main() {
       await tester.pumpAndSettle();
       await tester.enterText(find.byType(TextFormField).at(0), 'ana@x.com');
       await tester.enterText(find.byType(TextFormField).at(1), 'senhaerrada');
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Entrar'));
+      final entrar = find.widgetWithText(ElevatedButton, 'Entrar');
+      await tester.ensureVisible(entrar);
+      await tester.tap(entrar);
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
       expect(find.text('E-mail ou senha incorretos.'), findsOneWidget);

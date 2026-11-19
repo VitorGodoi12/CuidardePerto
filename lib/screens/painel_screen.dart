@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../data/dados_cuidador.dart';
-import '../models/alerta.dart';
 import '../models/idoso.dart';
 import '../state/sessao.dart';
 import '../theme/app_theme.dart';

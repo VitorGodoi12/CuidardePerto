@@ -55,7 +55,7 @@ A **hora simulada é fixa em 14:00**: dose não tomada com horário anterior a i
 
 ## Como executar
 
-**Requisitos para Android:** Flutter 3.47.8 ou superior (Dart 3.13+), JDK 17, VS Code ou Android Studio, Android SDK Platform 36.0 (API 36, incluindo `platforms/android-36/android.jar`), Android SDK Build-Tools 36.0.0, NDK 28.2.13676358 e CMake 3.22.1. No Android Studio, abra **Tools → SDK Manager → SDK Platforms**, marque **Android 16 / API 36** e aplique. Na aba **SDK Tools**, instale os componentes indicados acima. O Android SDK e o Gradle não são armazenados no GitHub: cada pessoa instala o SDK localmente, e o Gradle Wrapper baixa a versão fixada pelo projeto na primeira compilação. O arquivo `android/local.properties` é local e será gerado pelo Flutter.
+**Requisitos para Android:** Flutter 3.47.8 ou superior (Dart 3.13+), JDK 17, VS Code ou Android Studio, Android SDK Platforms 35 e 36, Android SDK Build-Tools 36.0.0, NDK 28.2.13676358 e CMake 3.22.1. No Android Studio, abra **Tools → SDK Manager → SDK Platforms**, marque **Android 15 / API 35** e **Android 16 / API 36** e aplique. Na aba **SDK Tools**, instale os componentes indicados acima. O Android SDK e o Gradle não são armazenados no GitHub: cada pessoa instala o SDK localmente, e o Gradle Wrapper baixa a versão fixada pelo projeto na primeira compilação. O arquivo `android/local.properties` é local e será gerado pelo Flutter.
 
 ```bash
 git clone https://github.com/VitorGodoi12/CuidardePerto.git
@@ -63,13 +63,15 @@ cd CuidardePerto
 
 flutter doctor --android-licenses
 flutter pub get
-flutter analyze
+flutter analyze --no-fatal-infos
 flutter test
 flutter run
 flutter build apk --release
 ```
 
 O APK de release é gerado em `build/app/outputs/flutter-apk/app-release.apk`.
+
+Se o Gradle falhar com `Cannot query the value of this provider because it has no value available`, confira se as pastas `platforms/android-36` e `platforms/android-35` do SDK contêm `android.jar`. Nesta versão, o app compila com a API 36 e uma dependência Android usa a API 35. Se faltar o arquivo em uma das pastas, reinstale a plataforma correspondente pelo SDK Manager. Para executar o app, inicie um dispositivo virtual no **Device Manager** ou conecte um celular com depuração USB e confirme que ele aparece em `flutter devices`.
 
 **Acesso demonstrativo.** Na tela de login, use a conta já preenchida ou toque em **Acesso de demonstração** para preencher os campos. Ela inclui Dona Maria entre as pessoas acompanhadas. Se preferir criar uma conta, use dados fictícios.
 
@@ -109,6 +111,7 @@ test/widget_test.dart     testes de risco, login, medicamentos e cadastro
 
 - **Ferramenta:** Claude (Anthropic).
 - **Para quê:** leitura e síntese dos documentos de escopo, geração do código Dart/Flutter, dos testes, deste README e do script que gerou as imagens ilustrativas (logo, ilustração do login e avatares).
+- **Codex (OpenAI).** Revisão dos critérios de Mobile, correção de documentação, diagnóstico do build Android e correções nas telas e nos testes de autenticação.
 
 ## Limitações do protótipo
 

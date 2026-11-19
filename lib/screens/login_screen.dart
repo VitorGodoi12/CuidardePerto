@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
     _iniciado = true;
     final sessao = SessaoScope.leitura(context);
     _email.text = sessao.emailLembrado.isNotEmpty ? sessao.emailLembrado : CredenciaisDemo.email;
-    _senha.text = CredenciaisDemo.senha;
+    if (_email.text == CredenciaisDemo.email) _senha.text = CredenciaisDemo.senha;
     _lembrar = sessao.lembrarPadrao;
   }
 

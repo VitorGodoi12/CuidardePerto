@@ -130,25 +130,24 @@ class BotaoCarregando extends StatelessWidget {
           )
         : Row(mainAxisSize: MainAxisSize.min, children: [
             if (icone != null && !iconeAoFinal) ...[Icon(icone, size: 20), const SizedBox(width: 8)],
-            Text(texto),
+            Flexible(child: Text(texto, textAlign: TextAlign.center)),
             if (icone != null && iconeAoFinal) ...[const SizedBox(width: 8), Icon(icone, size: 20)],
           ]);
-    return SizedBox(
-      height: 54,
-      child: ElevatedButton(
-        onPressed: carregando ? null : onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: claro ? Colors.white : AppColors.primariaEscura,
-          foregroundColor: corTexto,
-          disabledBackgroundColor: claro ? Colors.white70 : AppColors.primaria.withValues(alpha: .75),
-          disabledForegroundColor: corTexto,
-          shape: const StadiumBorder(),
-          elevation: 2,
-          shadowColor: AppColors.primaria.withValues(alpha: .25),
-          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
-        ),
-        child: conteudo,
+    return ElevatedButton(
+      onPressed: carregando ? null : onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: claro ? Colors.white : AppColors.primariaEscura,
+        foregroundColor: corTexto,
+        disabledBackgroundColor: claro ? Colors.white70 : AppColors.primaria.withValues(alpha: .75),
+        disabledForegroundColor: corTexto,
+        minimumSize: const Size(0, 54),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        shape: const StadiumBorder(),
+        elevation: 2,
+        shadowColor: AppColors.primaria.withValues(alpha: .25),
+        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
       ),
+      child: conteudo,
     );
   }
 }

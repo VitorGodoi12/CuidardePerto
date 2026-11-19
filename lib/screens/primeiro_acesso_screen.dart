@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../state/sessao.dart';
 import '../theme/app_theme.dart';
-import '../widgets/auth_widgets.dart';
 import '../widgets/logo_cuidar.dart';
 
 /// Experiência de boas-vindas exibida uma única vez por cuidador.
