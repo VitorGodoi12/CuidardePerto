@@ -33,14 +33,12 @@ A interface segue a referência visual turquesa e verde-menta: abertura em degra
 | 11 | Lembretes | Lista de doses pendentes e tela de lembrete com opção para marcar como tomada |
 | 12 | Mais e Meu Perfil | Preferências demonstrativas, contatos, alertas, dados do cuidador e saída da conta |
 
-**Capturas de tela:** `[PREENCHER: adicionar imagens em docs/ após rodar no emulador]`
-
 ### Fluxo de navegação
 
 `Boas-vindas → Login/Cadastro → Painel → Detalhe → (Medicamentos → Cadastro | Histórico | Contatos | Alerta crítico → Contatos)`. A navegação inferior oferece Início, Idosos, botão central de ações rápidas, Agenda e Mais. Medicamentos, lembretes e alertas também ficam nos atalhos do painel e em Mais.
 
-- O Login abre o Painel com `pushReplacement`; "Sair" faz o caminho inverso após um `AlertDialog`.
-- Parâmetros por construtor: `Idoso` (Painel → Detalhe → telas de medicamentos, histórico e contatos), `Alerta` (Detalhe → Alerta crítico), `nomeCuidador` (Login → Painel).
+- O `AuthGate` escolhe a tela de acordo com o estado da sessão. Após a autenticação e as etapas de primeiro acesso, mostra o Painel. Ao sair da conta, volta para Boas-vindas.
+- Parâmetros por construtor: `Idoso` (Painel → Detalhe → telas de medicamentos, histórico e contatos), `Alerta` (Detalhe → Alerta crítico).
 - Valores de retorno com `Navigator.pop`: `Medicamento` (Cadastro → Medicamentos) e `bool` resolvido (Alerta crítico → Detalhe).
 - Em toda tela aberta com `await Navigator.push(...)`, ao voltar o app chama `setState()`.
 
@@ -73,10 +71,10 @@ flutter build apk --release
 
 O APK de release é gerado em `build/app/outputs/flutter-apk/app-release.apk`.
 
-**Acesso demonstrativo:** crie uma conta na tela de cadastro. As contas e os dados existem apenas durante a execução atual do app; use dados fictícios.
+**Acesso demonstrativo.** Na tela de login, use a conta já preenchida ou toque em **Acesso de demonstração** para preencher os campos. Ela inclui Dona Maria entre as pessoas acompanhadas. Se preferir criar uma conta, use dados fictícios.
 
 **Roteiro rápido de demonstração:**
-1. Login com campos vazios, senha curta e senha errada; depois o login correto.
+1. Teste o login com campos vazios, senha curta e senha errada. Depois, entre com a conta de demonstração.
 2. Painel → Dona Maria → Medicamentos: marque doses e veja o contador e a barra mudarem.
 3. "Novo medicamento": envie vazio, use horário `25:70`, preencha corretamente.
 4. Detalhe → Simular evento → Queda → Ver contatos → Marcar como resolvido.
@@ -89,7 +87,9 @@ lib/
   main.dart               ponto de entrada e MaterialApp
   theme/app_theme.dart    cores, tipografia, cartão padrão e mensagens
   models/                 idoso, medicamento, alerta, contato
-  data/mock_data.dart     dados simulados e hora simulada
+  data/dados_cuidador.dart dados da pessoa acompanhada e operações do painel
+  services/               interfaces e repositórios em memória
+  state/sessao.dart       estado da sessão e preferências de acesso
   screens/                boas-vindas, login, painel, idosos, medicamentos, agenda, lembretes, alertas e demais fluxos
   widgets/                risco_badge, idoso_card, alerta_card, aparecer
 assets/images/            logo, foto de abertura do mockup e avatares
@@ -98,7 +98,7 @@ test/widget_test.dart     testes de risco, login, medicamentos e cadastro
 
 ## Decisões técnicas
 
-- **Somente SDK do Flutter**: sem Provider, Bloc, GetX, `intl` ou `url_launcher` (fora do escopo das aulas). Estado com `StatefulWidget` e `setState()`.
+- **Estado e preferências.** As telas usam `StatefulWidget` e `setState()` para atualizar a interface. A sessão usa `ChangeNotifier`. O pacote `shared_preferences` armazena a opção de lembrar o acesso e, quando habilitada, o e-mail. As contas e os dados de cuidado ficam em memória.
 - **Navegação** com `Navigator.push` e `MaterialPageRoute` (rotas nomeadas não são usadas).
 - **Acessibilidade:** textos de 16 a 18 sp, botões com no mínimo 48 dp, rótulos permanentes nos campos, ícones sempre com texto, risco indicado por cor, ícone e texto, e animações desligadas quando o sistema pede "reduzir movimento".
 - **Cores de risco** preservam os valores oficiais; o texto dos selos usa tons mais escuros do mesmo matiz para garantir contraste.
@@ -107,21 +107,20 @@ test/widget_test.dart     testes de risco, login, medicamentos e cadastro
 
 ## Declaração de uso de IA generativa
 
-`[CONFERIR E AJUSTAR conforme o uso real do grupo]`
-
 - **Ferramenta:** Claude (Anthropic).
 - **Para quê:** leitura e síntese dos documentos de escopo, geração do código Dart/Flutter, dos testes, deste README e do script que gerou as imagens ilustrativas (logo, ilustração do login e avatares).
-- **Revisão:** o grupo revisou o código, executou o app e é responsável por explicá-lo na apresentação.
 
 ## Limitações do protótipo
 
-Sem sensores reais, API, banco de dados, notificações, GPS, câmera, login real ou ligações telefônicas. Tudo é simulado e os dados voltam ao estado inicial ao reiniciar o app.
+Sem sensores reais, API, banco de dados, notificações, GPS, câmera, login real ou ligações telefônicas. Contas e registros de cuidado voltam ao estado inicial ao reiniciar o app. A preferência de acesso e o e-mail lembrado são armazenados localmente.
 
-## Integrantes e entrega
+## Integrantes
 
-- Grupo: `[PREENCHER]`
-- Integrantes: `[PREENCHER]`
-- Vídeo (YouTube, não listado): `[PREENCHER]`
+- Felipe Cuesta Puerta de Oliveira (RM 567703)
+- Vitor Costa de Godoi (RM 568448)
+- Vitor Santos Domingues (RM 568375)
+- João Victor De Souza Braz (RM 566862)
+- Lucas Marcelino Pompeu (RM 567010)
 
 ## Atualização visual e navegação
 - Identidade visual com o símbolo coração-casa do projeto (`assets/images/logo.png`).
